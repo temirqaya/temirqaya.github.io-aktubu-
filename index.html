@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Пишу по-арабски — тренажёр</title>
+<meta name="theme-color" content="#1F4B3A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:Amiri;src:url(fonts/amiri-Regular.woff) format("woff");font-display:block}
+@font-face{font-family:Amiri;font-weight:700;src:url(fonts/amiri-Bold.woff) format("woff");font-display:block}
+:root{--iv:#F7F3EA;--gr:#1F4B3A;--gd:#2E6B52;--go:#B8954F;--gl:#E7DCC3;--card:#FFFDF8;--ink:#1F4B3A}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--iv);color:var(--gr);font-family:Lora,Georgia,serif}
+body{min-height:100vh;background:var(--iv) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%23B8954F' stroke-opacity='.10' stroke-width='1'%3E%3Crect x='20' y='20' width='24' height='24'/%3E%3Crect x='20' y='20' width='24' height='24' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E")}
+.ar{font-family:Amiri,serif;direction:rtl}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px 40px}
+button{font-family:inherit;cursor:pointer}
+.hidden{display:none!important}
+/* шапка */
+.hero{text-align:center;padding:26px 0 8px}
+.arch{width:150px;height:170px;margin:0 auto;position:relative}
+.arch svg{position:absolute;inset:0}
+.hero .art{font-size:34px;color:var(--go);font-weight:700;line-height:1.5;margin-top:6px}
+.hero h1{font-size:28px;margin:0;font-style:italic;font-weight:600}
+.orn{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}
+.orn i{display:block;width:60px;height:1px;background:var(--go)}
+.sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--go)}
+.intro{font-size:14.5px;line-height:1.55;text-align:center;color:var(--gd);margin:12px 4px 4px}
+.prog{margin:16px 0 6px;background:var(--card);border:1px solid var(--gl);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:8px;background:var(--gl);border-radius:8px;overflow:hidden}.bar b{display:block;height:100%;background:linear-gradient(90deg,var(--go),#D9B977);width:0;transition:width .4s}
+.prog span{font-size:13px;color:var(--gd);white-space:nowrap}
+.kick{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--go);text-align:center;margin:22px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;direction:rtl}
+.tile{position:relative;background:var(--card);border:1px solid var(--gl);border-radius:14px 14px 10px 10px;padding:6px 2px 8px;text-align:center;color:var(--gr)}
+.tile .ar{font-size:36px;line-height:1.55;display:block}
+.tile small{display:block;font-size:11px;color:var(--gd);direction:ltr}
+.tile .st{font-size:10px;color:var(--go);letter-spacing:1px;height:12px;direction:ltr}
+.tile.done{border-color:var(--go);background:linear-gradient(180deg,#FBF3DF,var(--card))}
+.pdf{display:flex;align-items:center;gap:12px;margin:18px 0 4px;background:var(--gr);color:#fff;text-decoration:none;border-radius:16px;padding:12px 14px}
+.pdf .pi{flex:none;width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center}
+.pdf b{display:block;font-size:15.5px}.pdf small{display:block;font-size:12.5px;opacity:.85;margin-top:2px}
+.help{background:var(--card);border:1px solid var(--gl);border-radius:16px;padding:0 14px;margin-top:10px;font-size:14.5px;line-height:1.55}
+.help summary{cursor:pointer;list-style:none;padding:12px 0;font-weight:600;color:var(--gr);display:flex;justify-content:space-between;align-items:center}
+.help summary::-webkit-details-marker{display:none}.help summary:after{content:"+";color:var(--go);font-size:20px;line-height:1}.help[open] summary:after{content:"−"}
+.help p{margin:0 0 10px}.help ol{margin:0 0 10px;padding-left:20px}.help li{margin-bottom:6px}
+p,li,.intro,.foot,small{text-wrap:pretty}
+.xgrid{display:grid;gap:10px}
+.xtile{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--gl);border-radius:14px;padding:8px 14px;text-align:left;color:var(--gr)}
+.xtile .ar{font-size:30px;line-height:1.5;min-width:62px;text-align:center;color:var(--go)}.xtile .xt{flex:1}.xtile b{display:block;font-size:15px}.xtile small{font-size:12px;color:var(--gd)}
+.xtile .st{font-size:11px;color:var(--go);letter-spacing:1px}.xtile.done{border-color:var(--go);background:linear-gradient(90deg,#FBF3DF,var(--card))}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(31,75,58,.45);display:grid;place-items:center;padding:16px}
+.mbox{background:var(--iv);border-radius:20px;padding:20px 18px;max-width:380px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.mbox b{display:block;font-size:18px;margin-bottom:6px}.mbox p{font-size:14px;line-height:1.5;color:var(--gd);margin:0 0 12px}
+.mbox input{width:100%;font:inherit;font-size:17px;padding:12px 14px;border:1.5px solid var(--gl);border-radius:12px;background:#fff;color:var(--gr)}
+.mbox input:focus{outline:none;border-color:var(--go)}.merr{min-height:20px;font-size:13px;color:#A4452C;margin:6px 2px 0}
+.mcancel{display:block;width:100%;margin-top:8px;border:0;background:none;color:var(--gd);font-size:14px;padding:8px}
+.foot{text-align:center;font-size:12px;color:var(--gd);margin-top:34px;line-height:1.7}
+.foot em{color:var(--go)}
+/* экран буквы */
+.top{position:sticky;top:0;z-index:5;background:rgba(247,243,234,.94);backdrop-filter:blur(6px);display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gl)}
+.snd{font-size:17px}
+.back{border:1px solid var(--gl);background:var(--card);color:var(--gr);border-radius:12px;width:42px;height:42px;font-size:20px}
+.top .tt{flex:1;min-width:0}
+.top .tt b{display:block;font-size:17px}.top .tt span{font-size:12px;color:var(--gd)}
+.top .big{font-size:34px;color:var(--go);line-height:1}
+.steps{display:flex;gap:5px;margin:10px 0 2px;direction:rtl;flex-wrap:wrap;justify-content:center}
+.steps button{border:1px solid var(--gl);background:var(--card);color:var(--gr);border-radius:18px;padding:0 8px;font-size:13px;min-width:40px;height:40px}
+.steps button .ar{font-size:18px;line-height:1}
+.steps button.on{background:var(--gr);color:#fff;border-color:var(--gr)}
+.steps button.ok{border-color:var(--go)}
+.task{text-align:center;margin:8px 0 6px;font-size:14px;color:var(--gd);min-height:20px}
+.task b{color:var(--gr)}
+.pad{position:relative;background:var(--card);border:1.5px solid var(--go);border-radius:22px;overflow:hidden;touch-action:none;aspect-ratio:10/9;max-height:56vh;margin:0 auto}
+.pad canvas{position:absolute;inset:0;width:100%;height:100%}
+.res{position:absolute;left:0;right:0;bottom:10px;text-align:center;pointer-events:none}
+.res .stars{font-size:30px;color:var(--go);letter-spacing:4px;text-shadow:0 1px 0 #fff}
+.res .msg{box-shadow:0 1px 6px rgba(31,75,58,.12);font-size:14px;color:var(--gr);background:rgba(255,253,248,.92);display:inline-block;padding:4px 12px;border-radius:12px;margin-top:2px}
+.tools{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.tools button{white-space:nowrap;border:1px solid var(--gl);background:var(--card);color:var(--gr);border-radius:14px;padding:10px 4px;font-size:13.5px}
+.main{display:block;width:100%;margin-top:10px;border:0;border-radius:16px;padding:14px;font-size:16px;font-weight:600;background:var(--gr);color:#fff}
+.main.gold{background:var(--go)}
+.sw{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;font-size:13.5px;color:var(--gd)}
+.sw input{width:18px;height:18px;accent-color:var(--gr)}
+.card{background:var(--card);border:1px solid var(--gl);border-radius:16px;padding:12px 14px;margin-top:14px;font-size:14px;line-height:1.55}
+.card h3{margin:0 0 6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--go);font-weight:600}
+.card p{margin:4px 0}.card p b{color:var(--gr)}
+.forms{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;direction:rtl;margin-top:6px}
+.forms .ar{font-size:30px;line-height:1.6;display:block}.forms small{font-size:11px;color:var(--gd)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--gr);color:#fff;padding:10px 18px;border-radius:14px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="home">
+  <div class="hero">
+    <div class="arch" id="archArt"></div>
+    <div class="art ar">أَكْتُبُ بِالْعَرَبِيَّةِ</div>
+    <h1>Пишу по-арабски</h1>
+    <div class="orn"><i></i><svg width="14" height="14" viewBox="-7 -7 14 14"><rect x="-4" y="-4" width="8" height="8" fill="none" stroke="#B8954F"/><rect x="-4" y="-4" width="8" height="8" fill="none" stroke="#B8954F" transform="rotate(45)"/></svg><i></i></div>
+    <div class="sub">Тренажёр письма · почерк насх</div>
+    <p class="intro">Тренажёр к прописям «Пишу по-арабски». Здесь рука учится вести линию прямо на экране телефона: обводите образец пальцем, а тренажёр подскажет, насколько ровно получилось.</p>
+  </div>
+  <a class="pdf" href="#" id="pdfBtn">
+    <span class="pi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></svg></span>
+    <span><b>Скачать прописи (PDF)</b><small>75 страниц для печати · откроется по слову-ключу из покупки</small></span></a>
+  <details class="help" open>
+    <summary>Для чего тренажёр</summary>
+    <p>Прописи на бумаге учат руку, а тренажёр помогает между занятиями: в дороге, в очереди, когда под рукой нет тетради. Он показывает форму каждой буквы, порядок движения и сразу проверяет, легла ли ваша линия по образцу.</p>
+    <p>Лучше всего заниматься вместе: сначала разберите букву в тренажёре, потом напишите её в прописях.</p>
+  </details>
+  <details class="help">
+    <summary>Как пользоваться</summary>
+    <ol>
+      <li>Выберите букву ниже. Буквы идут по порядку алфавита, справа налево.</li>
+      <li>Нажмите <b>«▶ Показать»</b> — образец проявится в том направлении, в котором букву пишут.</li>
+      <li>Обведите светлый образец пальцем. Точки и огласовки ставьте в самом конце.</li>
+      <li>Нажмите <b>«Проверить»</b>. Две или три звезды — можно идти дальше; одна — попробуйте ещё раз.</li>
+      <li>Пройдите все формы буквы: отдельно, в начале, в середине и в конце слова, а потом три слова.</li>
+      <li>Когда рука привыкнет, включите <b>«Писать без образца»</b>: после проверки тренажёр покажет, как было нужно.</li>
+    </ol>
+    <p><b>«Назад»</b> убирает последнюю линию, <b>«Стереть»</b> — всё. Пройденные буквы отмечаются звёздами и запоминаются на вашем телефоне.</p>
+    <p><b>Как на телефоне:</b> откройте меню браузера и выберите «На экран Домой» — тренажёр будет открываться как приложение и работать без интернета.</p>
+  </details>
+  <div class="prog"><div class="bar"><b id="pbar"></b></div><span id="ptxt">0 из 28</span></div>
+  <button class="main gold hidden" id="dipBtn">🎓 Получить диплом</button>
+  <div class="kick">28 букв</div>
+  <div class="grid" id="grid"></div>
+  <div class="kick">Буквы вместе и красивое письмо</div>
+  <div class="xgrid" id="xgrid"></div>
+  <div class="foot">Пишите понемногу каждый день — лучше пять минут ежедневно, чем час раз в неделю.<br><br>
+  Составитель: Эльмаза Темиркалиева · Instagram: @the.fadhakkir<br>
+  <em>Всё верное — от Аллаха, а ошибки — от меня. Валлаху а‘лям — Аллах знает лучше.</em></div>
+</section>
+
+<section id="letter" class="hidden">
+  <div class="top"><button class="back" id="back" aria-label="Назад">←</button>
+    <div class="tt"><b id="lname"></b><span id="lsnd"></span></div><button class="back snd" id="sndb" aria-label="Звук">🔊</button><div class="big ar" id="lbig"></div></div>
+  <div class="steps" id="steps"></div>
+  <div class="task" id="task"></div>
+  <div class="pad" id="pad"><canvas id="bg"></canvas><canvas id="ink"></canvas>
+    <div class="res hidden" id="res"><div class="stars" id="stars"></div><div class="msg" id="msg"></div></div></div>
+  <div class="tools"><button id="undo">↶ Назад</button><button id="clear">Стереть</button><button id="show">▶ Показать</button></div>
+  <label class="sw"><input type="checkbox" id="free"> Писать без образца</label>
+  <button class="main" id="check">Проверить</button>
+  <button class="main gold hidden" id="next">Дальше →</button>
+  <div class="card" id="info"></div>
+</section>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal hidden" id="dipM"><div class="mbox">
+  <b>Машаллах! Все 28 букв пройдены</b>
+  <p>Впишите имя — оно появится на дипломе. Потом сохраните картинку себе в галерею.</p>
+  <input id="dipName" type="text" autocomplete="off" placeholder="Ваше имя" maxlength="40">
+  <canvas id="dipC" width="1080" height="1350" style="width:100%;border-radius:12px;margin-top:12px;display:none"></canvas>
+  <button class="main" id="dipGo">Показать диплом</button>
+  <a class="main gold hidden" id="dipSave" download="diplom-pishu-po-arabski.png" style="text-align:center;text-decoration:none">Сохранить картинку</a>
+  <button class="mcancel" id="dipNo">Закрыть</button>
+</div></div>
+<div class="modal hidden" id="keyM"><div class="mbox">
+  <b>Прописи для печати</b>
+  <p>Введите слово-ключ, которое вы получили при покупке. Его нужно ввести только один раз — дальше PDF будет открываться сразу.</p>
+  <input id="keyIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="слово-ключ">
+  <div class="merr" id="keyErr"></div>
+  <button class="main" id="keyGo">Открыть PDF</button>
+  <button class="mcancel" id="keyNo">Отмена</button>
+</div></div>
+
+<script>
+const L = [{"ch": "ا", "n": "Алиф", "ar": "أَلِف", "g": "первая буква", "conn": false, "snd": "Сам по себе не даёт звука: продлевает [а] после фатхи и служит опорой для хамзы.", "how": "Одно движение сверху вниз, ровно и без наклона.", "size": "Около 5 точек в высоту.", "err": "Алиф пишут с наклоном или слишком коротким.", "w": [["أَبٌ", "аб — отец"], ["بَابٌ", "баб — дверь"], ["سَلَامٌ", "салям — мир"]]}, {"ch": "ب", "n": "Ба", "ar": "بَاء", "g": "группа «лодочки»", "conn": true, "snd": "[б], как в слове «бабочка».", "how": "Начните сверху справа, коротко опуститесь и ведите плоское дно налево; точку поставьте под серединой.", "size": "5–6 точек в ширину.", "err": "«Лодочку» делают глубокой, как «нун».", "w": [["بَيْتٌ", "байт — дом"], ["كِتَابٌ", "китаб — книга"], ["رَبٌّ", "рабб — Господь"]]}, {"ch": "ت", "n": "Та", "ar": "تَاء", "g": "группа «лодочки»", "conn": true, "snd": "[т], как в слове «тихо».", "how": "(1) Та же «лодочка», что у «ба»: короткий спуск справа и плоское дно налево. (2) Две точки рядом над серединой буквы.", "size": "Как у «ба»: 5–6 точек в ширину.", "err": "Точки ставят одну над другой или слишком высоко. Они лежат рядом, низко над серединой «лодочки».", "w": [["تَوْبَةٌ", "тауба — покаяние"], ["تِينٌ", "тин — инжир"], ["تَقْوَى", "таква — богобоязненность"]]}, {"ch": "ث", "n": "Са", "ar": "ثَاء", "g": "группа «лодочки»", "conn": true, "snd": "Межзубный [с]: кончик языка между зубами, как в английском think.", "how": "(1) «Лодочка», как у «ба». (2) Три точки треугольником над буквой: две внизу, одна сверху.", "size": "Как у «ба»: 5–6 точек в ширину.", "err": "Треугольник точек переворачивают вершиной вниз. Вершина — всегда наверху.", "w": [["ثَوَابٌ", "саваб — награда"], ["ثَلَاثَةٌ", "саляса — три"], ["ثَمَرٌ", "самар — плоды"]]}, {"ch": "ج", "n": "Джим", "ar": "جِيم", "g": "группа «чаши»", "conn": true, "snd": "[дж], как в слове «джинсы», но мягче.", "how": "(1) Короткая «крышечка» сверху слева направо, затем линия наискосок влево вниз — и большая чаша под строкой. (2) Точка внутри чаши.", "size": "Головка — около 3 точек в ширину, чаша уходит под строку на 3–4 точки.", "err": "Чашу делают маленькой, на уровне строки. Она глубокая и опускается под строку.", "w": [["جَنَّةٌ", "джанна — рай"], ["جُمُعَةٌ", "джуму‘а — пятница"], ["جَمِيلٌ", "джамиль — красивый"]]}, {"ch": "ح", "n": "Ха", "ar": "حَاء", "g": "группа «чаши»", "conn": true, "snd": "Глухой [х] из середины горла — как тёплый выдох на замёрзшие ладони.", "how": "(1) Головка как у «джим» и большая чаша под строкой. Точек нет.", "size": "Как у «джим».", "err": "Путают с «джим» и «хо». Запомните: «джим» — точка внутри, «хо» — сверху, у «ха» точки нет.", "w": [["حَمْدٌ", "хамд — хвала"], ["حَقٌّ", "хакк — истина"], ["رَحْمَةٌ", "рахма — милость"]]}, {"ch": "خ", "n": "Хо", "ar": "خَاء", "g": "группа «чаши»", "conn": true, "snd": "Хриплый [х] из верхней части горла, как в слове «хор», но глубже.", "how": "(1) Головка и чаша, как у «ха». (2) Одна точка над головкой.", "size": "Как у «джим».", "err": "Точку ставят внутрь чаши, как у «джим». У «хо» она над буквой.", "w": [["خَيْرٌ", "хайр — благо"], ["خُبْزٌ", "хубз — хлеб"], ["آخِرَةٌ", "ахира — вечная жизнь"]]}, {"ch": "د", "n": "Даль", "ar": "دَال", "g": "группа «уголка»", "conn": false, "snd": "[д], как в слове «дом».", "how": "(1) Короткий наклонный штрих сверху вниз, затем короткая линия по строке налево — получается мягкий уголок.", "size": "Около 2–3 точек в высоту и столько же в ширину.", "err": "«Даль» делают высоким, как алиф, или круглым, как «ра». Это небольшой уголок, стоящий на строке.", "w": [["دِينٌ", "дин — религия"], ["دُعَاءٌ", "ду‘а — мольба"], ["وَلَدٌ", "валяд — ребёнок"]]}, {"ch": "ذ", "n": "Заль", "ar": "ذَال", "g": "группа «уголка»", "conn": false, "snd": "Межзубный [з], как в английском this.", "how": "(1) Уголок, как у «даль». (2) Точка над ним.", "size": "Как у «даль».", "err": "Точку сдвигают далеко вправо. Она стоит прямо над уголком.", "w": [["ذِكْرٌ", "зикр — поминание Аллаха"], ["ذَهَبٌ", "захаб — золото"], ["أُذُنٌ", "узун — ухо"]]}, {"ch": "ر", "n": "Ра", "ar": "رَاء", "g": "группа «запятой»", "conn": false, "snd": "Раскатистый [р].", "how": "(1) Короткая дуга сверху вниз: начинается на строке и уходит под неё влево, как большая запятая.", "size": "Около 3 точек; половина буквы — под строкой.", "err": "Путают с «даль». У «ра» нет угла: это плавная дуга, уходящая ниже строки.", "w": [["رَسُولٌ", "расуль — посланник"], ["رِزْقٌ", "ризк — удел, пропитание"], ["نُورٌ", "нур — свет"]]}, {"ch": "ز", "n": "Зайн", "ar": "زَاي", "g": "группа «запятой»", "conn": false, "snd": "[з], как в слове «зима».", "how": "(1) Дуга, как у «ра». (2) Точка над её началом.", "size": "Как у «ра».", "err": "Точку ставят над хвостом. Она над верхним концом дуги.", "w": [["زَكَاةٌ", "закят — обязательная милостыня"], ["زَيْتُونٌ", "зайтун — олива"], ["مِيزَانٌ", "мизан — весы"]]}, {"ch": "س", "n": "Син", "ar": "سِين", "g": "группа «зубчиков»", "conn": true, "snd": "[с], как в слове «сад».", "how": "(1) Три низких зубчика справа налево, затем чаша, как у «нун», наполовину под строкой.", "size": "Зубчики — по одной точке в высоту, вся буква — около 8 точек в ширину.", "err": "Зубчики разной высоты. Держите их одинаковыми и низкими, как ровный забор.", "w": [["سَمَاءٌ", "сама — небо"], ["سُورَةٌ", "сура"], ["سَبِيلٌ", "сабиль — путь"]]}, {"ch": "ش", "n": "Шин", "ar": "شِين", "g": "группа «зубчиков»", "conn": true, "snd": "[ш], как в слове «шум».", "how": "(1) Три зубчика и чаша, как у «син». (2) Три точки треугольником над зубцами.", "size": "Как у «син».", "err": "Точки ставят над чашей. Они над зубчиками, вершиной вверх.", "w": [["شَمْسٌ", "шамс — солнце"], ["شُكْرٌ", "шукр — благодарность"], ["شَهْرٌ", "шахр — месяц"]]}, {"ch": "ص", "n": "Сад", "ar": "صَاد", "g": "группа «петли»", "conn": true, "snd": "Твёрдый, «тяжёлый» [с]: язык прижат, звук идёт глубже.", "how": "(1) Вытянутая петля по строке, маленький зубчик после неё и чаша под строкой.", "size": "Петля — около 4 точек в ширину.", "err": "Забывают маленький зубчик между петлёй и чашей. Без него буква теряет форму.", "w": [["صَلَاةٌ", "саля — намаз"], ["صَبْرٌ", "сабр — терпение"], ["صِرَاطٌ", "сырат — путь"]]}, {"ch": "ض", "n": "Дад", "ar": "ضَاد", "g": "группа «петли»", "conn": true, "snd": "Твёрдый [д] с краёв языка — звук, которого нет ни в одном другом языке. Поэтому арабский называют «языком дад».", "how": "(1) Петля, зубчик и чаша, как у «сад». (2) Точка над петлёй.", "size": "Как у «сад».", "err": "Точку ставят над чашей. Она над петлёй.", "w": [["أَرْضٌ", "ард — земля"], ["رَمَضَانُ", "Рамадан"], ["فَضْلٌ", "фадль — милость, щедрость"]]}, {"ch": "ط", "n": "Та (твёрдая)", "ar": "طَاء", "g": "группа «петли с палочкой»", "conn": true, "snd": "Твёрдый, глубокий [т].", "how": "(1) Сначала петля по строке. (2) Потом вертикальная палочка сверху вниз, опускающаяся на петлю.", "size": "Петля — около 4 точек, палочка — как алиф.", "err": "Палочку пишут первой. Сначала петля, палочка — в конце.", "w": [["طَعَامٌ", "та‘ам — еда"], ["طَرِيقٌ", "тарик — дорога"], ["طَيِّبٌ", "таййиб — благой, чистый"]]}, {"ch": "ظ", "n": "За", "ar": "ظَاء", "g": "группа «петли с палочкой»", "conn": true, "snd": "Твёрдый межзубный [з].", "how": "(1) Петля, (2) палочка, как у «та». (3) Точка справа от палочки.", "size": "Как у «та».", "err": "Точку ставят слева от палочки. Её место — справа.", "w": [["ظِلٌّ", "зыль — тень"], ["ظُهْرٌ", "зухр — полдень"], ["عَظِيمٌ", "‘азым — великий"]]}, {"ch": "ع", "n": "Айн", "ar": "عَيْن", "g": "группа «открытой головки»", "conn": true, "snd": "Гортанный звук с напряжением в середине горла — его нет в русском языке, его лучше услышать от учителя.", "how": "(1) Небольшая открытая головка: начните справа сверху, полукругом влево, затем из неё — большая чаша под строкой.", "size": "Головка — около 3 точек, чаша уходит под строку.", "err": "Головку замыкают в кружок. Она всегда открыта справа.", "w": [["عِلْمٌ", "‘ильм — знание"], ["عَيْنٌ", "‘айн — глаз; источник"], ["عَبْدٌ", "‘абд — раб Аллаха"]]}, {"ch": "غ", "n": "Гайн", "ar": "غَيْن", "g": "группа «открытой головки»", "conn": true, "snd": "Картавый, грассирующий [г] из верхней части горла.", "how": "(1) Головка и чаша, как у «айн». (2) Точка над головкой.", "size": "Как у «айн».", "err": "Точку забывают или ставят внутрь головки. Она над буквой.", "w": [["غَفُورٌ", "гафур — Прощающий"], ["غَيْبٌ", "гайб — сокровенное"], ["مَغْرِبٌ", "магриб — закат"]]}, {"ch": "ف", "n": "Фа", "ar": "فَاء", "g": "группа «петельки»", "conn": true, "snd": "[ф], как в слове «фонарь».", "how": "(1) Маленькая петелька, затем длинная линия по строке налево с приподнятым концом. (2) Точка над петелькой.", "size": "Петелька — около 2 точек, вся буква — 6–7 точек в ширину.", "err": "Петельку делают большой, как у «мим». Она маленькая и аккуратная.", "w": [["فَجْرٌ", "фаджр — рассвет"], ["فَرَحٌ", "фарах — радость"], ["فِرْدَوْسٌ", "фирдаус — высшие сады Рая"]]}, {"ch": "ق", "n": "Каф", "ar": "قَاف", "g": "группа «петельки»", "conn": true, "snd": "Глубокий [к] из самого корня языка.", "how": "(1) Петелька и глубокая круглая чаша под строкой. (2) Две точки над петелькой.", "size": "Чаша опускается под строку на 2–3 точки.", "err": "Пишут плоский хвост, как у «фа». У «каф» хвост круглый и уходит под строку.", "w": [["قُرْآنٌ", "Кур’ан"], ["قَلْبٌ", "кальб — сердце"], ["قَمَرٌ", "камар — луна"]]}, {"ch": "ك", "n": "Кяф", "ar": "كَاف", "g": "группа «высоких»", "conn": true, "snd": "[к], мягкий, как в слове «кит».", "how": "(1) Высокая вертикаль сверху вниз и длинное основание налево по строке. (2) Маленький знак внутри (в начале и середине слова вместо него — наклонная черта сверху).", "size": "Высота — как у алифа, основание — 6–7 точек.", "err": "Забывают маленький знак внутри отдельной и конечной формы.", "w": [["كَرِيمٌ", "карим — щедрый"], ["كَلِمَةٌ", "калима — слово"], ["مَلِكٌ", "малик — царь"]]}, {"ch": "ل", "n": "Лям", "ar": "لَام", "g": "группа «высоких»", "conn": true, "snd": "[л], как в слове «лампа».", "how": "(1) Высокая вертикаль, как у алифа, переходящая внизу в чашу налево вверх.", "size": "Палочка — как алиф, чаша — как у «нун».", "err": "Чашу делают маленькой. Она широкая и глубокая, как у «нун».", "w": [["لَيْلٌ", "ляйль — ночь"], ["لِسَانٌ", "лисан — язык"], ["قَلَمٌ", "калям — перо"]]}, {"ch": "م", "n": "Мим", "ar": "مِيم", "g": "группа «петельки»", "conn": true, "snd": "[м], как в слове «мир».", "how": "(1) Маленькая круглая петелька на строке и хвостик вниз под строку.", "size": "Петелька — около 2 точек.", "err": "Петельку делают пустой и большой. Она маленькая, плотная, иногда почти закрашенная.", "w": [["مَسْجِدٌ", "масджид — мечеть"], ["مَاءٌ", "ма — вода"], ["إِسْلَامٌ", "ислам"]]}, {"ch": "ن", "n": "Нун", "ar": "نُون", "g": "группа «чаши»", "conn": true, "snd": "[н], как в слове «нос».", "how": "(1) Глубокая полукруглая чаша, наполовину под строкой. (2) Точка над серединой.", "size": "Около 4 точек в ширину.", "err": "Путают с «ба». У «нун» чаша круглая и опускается ниже строки.", "w": [["نَبِيٌّ", "набий — пророк"], ["نَفْسٌ", "нафс — душа"], ["إِيمَانٌ", "иман — вера"]]}, {"ch": "ه", "n": "Ха лёгкая", "ar": "هَاء", "g": "особая буква", "conn": true, "snd": "Лёгкий выдох [h], как будто дышите на стекло.", "how": "(1) Отдельно — небольшой овал. В начале слова — «два глаза» هـ, в середине и конце — свои формы: смотрите таблицу.", "size": "Около 2–3 точек.", "err": "Путают с та марбута ة. У «ха» точек нет.", "w": [["هُدًى", "худа — верное руководство"], ["هِلَالٌ", "хиляль — молодой месяц"], ["اللَّهُ", "Аллах"]]}, {"ch": "و", "n": "Вав", "ar": "وَاو", "g": "группа «петельки»", "conn": false, "snd": "[в] (губы округлены, как для [у]) или долгий [у].", "how": "(1) Маленькая петелька на строке и хвост вниз под строку влево.", "size": "Петелька — около 2 точек, хвост — 2–3 точки.", "err": "Хвост ведут вправо. Он всегда уходит под строку влево.", "w": [["وَرْدٌ", "вард — роза"], ["وَطَنٌ", "ватан — родина"], ["يَوْمٌ", "яум — день"]]}, {"ch": "ي", "n": "Йе", "ar": "يَاء", "g": "последняя буква", "conn": true, "snd": "[й] или долгий [и].", "how": "(1) Отдельно — изгиб на строке и широкая чаша под строкой. (2) Две точки под буквой.", "size": "Чаша — около 5 точек в ширину.", "err": "Ставят точки над буквой. У «йе» они всегда снизу.", "w": [["يَدٌ", "яд — рука"], ["يَقِينٌ", "якын — твёрдая убеждённость"], ["يَتِيمٌ", "ятим — сирота"]]}];
+const FN = ['отдельно','в конце','в середине','в начале'];
+const ZW = '\u0640';
+function forms(l){ // порядок: отдельно, начало, середина, конец (как в прописях)
+  if(!l.conn) return [[l.ch,'отдельно'],[ZW+l.ch,'в конце']];
+  return [[l.ch,'отдельно'],[l.ch+ZW,'в начале'],[ZW+l.ch+ZW,'в середине'],[ZW+l.ch,'в конце']];
+}
+const X = [
+ {n:'Соединения', ch:'لا', g:'Часть 2 · буквы вместе', how:'Шесть букв — ا د ذ ر ز و — соединяются только справа: после них слово «разрывается». Лям и алиф вместе пишутся особым знаком لا.',
+  ex:[['لَا','ля — «нет»'],['ـة','та марбута в конце слова'],['دَارٌ','дар — дом'],['وَرْدٌ','вард — роза'],['زَادٌ','зад — запас']]},
+ {n:'Огласовки', ch:'بَ', g:'Часть 2 · маленькие знаки', how:'Огласовки ставят в самом конце: сначала буквы, потом точки, затем огласовки. Они небольшие и стоят точно над или под своей буквой.',
+  ex:[['بَ','фатха — [а]'],['بِ','кясра — [и]'],['بُ','дамма — [у]'],['بْ','сукун — гласного нет'],['بّ','шадда — удвоение'],['بٌ','танвин — [ун]'],['بَا','мадд — долгий [а]']]},
+ {n:'Знаки Корана', ch:'ٱ', g:'Часть 2 · как в мусхафе', how:'Хамзат-васль ٱ в середине речи не читается. Маленький алиф над буквой читается как долгий [а]. Знак мадда — тянуть звук дольше. Номер аята пишут арабскими цифрами.',
+  ex:[['بِسْمِ ٱللَّهِ','хамзат-васль'],['ٱلرَّحْمَٰنِ','маленький алиф'],['جَآءَ','знак мадда'],['١٢٣','арабские цифры: 1, 2, 3']]},
+ {n:'Слова поминания', ch:'ذِكْر', g:'Часть 3 · пишем красиво', how:'Пишите медленно и с намерением. Сначала буквы одной линией, потом точки и огласовки.',
+  ex:[['بِسْمِ اللَّهِ','С именем Аллаха,'],['الرَّحْمَٰنِ الرَّحِيمِ','Милостивого, Милосердного'],['سُبْحَانَ اللَّهِ','Пречист Аллах'],['الْحَمْدُ لِلَّهِ','Хвала Аллаху'],['اللَّهُ أَكْبَرُ','Аллах велик'],['لَا إِلَٰهَ إِلَّا اللَّهُ','Нет божества, кроме Аллаха'],['أَسْتَغْفِرُ اللَّهَ','Прошу прощения у Аллаха']]},
+ {n:'Сура «Аль-Ихлас»', ch:'قُلْ', g:'Часть 3 · сура 112', how:'«Скажи: Он — Аллах Единый, Аллах Самодостаточный. Он не родил и не был рождён, и нет никого, равного Ему». Посланник Аллаха ﷺ сказал, что эта сура равна трети Корана (аль-Бухари).',
+  ex:[['قُلْ هُوَ اللَّهُ أَحَدٌ','аят 1: «Скажи: Он — Аллах Единый»'],['اللَّهُ الصَّمَدُ','аят 2: «Аллах Самодостаточный»'],['لَمْ يَلِدْ','аят 3: «Он не родил…»'],['وَلَمْ يُولَدْ','аят 3: «…и не был рождён»'],['وَلَمْ يَكُنْ لَهُ','аят 4: «И нет никого…»'],['كُفُوًا أَحَدٌ','аят 4: «…равного Ему»']]}
+];
+X.forEach(x=>{ x.x = true; L.push(x); });
+function exercises(l){
+  if(l.x) return l.ex.map(([t,n])=>({t, label:t, name:n, kind:'x'}));
+  const f = forms(l).map(([t,n])=>({t, label:t, name:n, kind:'f'}));
+  const w = l.w.map(([t,tr])=>({t, label:t, name:tr, kind:'w'}));
+  return f.concat(w);
+}
+/* ---------- хранилище ---------- */
+let S = {};
+try{ S = JSON.parse(localStorage.getItem('aktubu')||'{}')||{}; }catch(e){ S = {}; }
+function save(){ try{ localStorage.setItem('aktubu', JSON.stringify(S)); }catch(e){} }
+function best(i,j){ return (S[i]&&S[i][j])||0; }
+function letterStars(i){ const ex = exercises(L[i]); let s = 0; ex.forEach((_,j)=>s+=best(i,j)); return s/ex.length; }
+function letterDone(i){ const ex = exercises(L[i]); return ex.every((_,j)=>best(i,j)>=2); }
+
+/* ---------- арка на главной ---------- */
+(function(){
+  const W=150,H=170,GO='#B8954F';
+  const ap = (w,h,i)=>`M${i} ${h-i} V${h*.42} Q${i} ${h*.2} ${w/2} ${i} Q${w-i} ${h*.2} ${w-i} ${h*.42} V${h-i} Z`;
+  let lat=''; for(let x=12;x<150;x+=18)for(let y=16;y<120;y+=18) lat+=`<g transform="translate(${x} ${y})" opacity=".2"><rect x="-6" y="-6" width="12" height="12" fill="none" stroke="${GO}" stroke-width=".6"/><rect x="-6" y="-6" width="12" height="12" transform="rotate(45)" fill="none" stroke="${GO}" stroke-width=".6"/></g>`;
+  document.getElementById('archArt').innerHTML = `<svg viewBox="0 0 ${W} ${H}"><defs><clipPath id="ac"><path d="${ap(W,H,3)}"/></clipPath><radialGradient id="gl" cx=".5" cy=".3" r=".6"><stop offset="0" stop-color="#FFF3CF"/><stop offset="1" stop-color="#FFFDF8"/></radialGradient></defs>
+  <path d="${ap(W,H,3)}" fill="url(#gl)"/><g clip-path="url(#ac)">${lat}
+  <line x1="75" y1="0" x2="75" y2="26" stroke="${GO}" stroke-width=".8"/><circle cx="75" cy="46" r="20" fill="#FFE9A8" opacity=".45"/>
+  <path d="M67 28 h16 l-2 4 h-12z" fill="${GO}"/><path d="M66 32 h18 v4 q0 16 -9 20 q-9 -4 -9 -20z" fill="#F6D98C" stroke="${GO}" stroke-width=".9"/>
+  <path d="M71 36 v13 M75 35 v19 M79 36 v13" stroke="${GO}" stroke-width=".5"/><path d="M72 56 h6 l-3 4z" fill="${GO}"/>
+  <path d="M14 140 Q44 128 76 134 Q108 140 138 128 L140 158 Q108 168 76 160 Q44 152 12 164Z" fill="#fff" stroke="${GO}" stroke-width=".8"/>
+  <path d="M34 150 C46 140 58 158 72 144 S94 142 104 150" stroke="#1F4B3A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <g transform="rotate(-38 92 128)"><rect x="50" y="125" width="70" height="5" rx="2" fill="#B9874F"/><path d="M50 125 L39 127.5 L50 130Z" fill="#7A5432"/></g>
+  <path d="M118 104 Q117 120 127 121 Q137 120 136 104 Q136 98 127 98 Q118 98 118 104Z" fill="#1F4B3A"/><rect x="122" y="92" width="10" height="6" rx="1.5" fill="${GO}"/>
+  </g><path d="${ap(W,H,3)}" fill="none" stroke="${GO}" stroke-width="3"/><path d="${ap(W,H,9)}" fill="none" stroke="${GO}" stroke-width=".8" opacity=".7"/></svg>`;
+})();
+
+/* ---------- главная ---------- */
+function drawHome(){
+  const g = document.getElementById('grid'); g.innerHTML = '';
+  let done = 0;
+  L.forEach((l,i)=>{ if(l.x) return;
+    const st = letterStars(i), d = letterDone(i); if(d) done++;
+    const b = document.createElement('button'); b.className = 'tile'+(d?' done':'');
+    b.innerHTML = `<span class="ar">${l.ch}</span><small>${l.n}</small><div class="st">${st>0?'★'.repeat(Math.round(st))+'☆'.repeat(3-Math.round(st)):''}</div>`;
+    b.onclick = ()=>{ location.hash = '#l'+(i+1); };
+    g.appendChild(b);
+  });
+  document.getElementById('pbar').style.width = (done/28*100)+'%';
+  document.getElementById('ptxt').textContent = done+' из 28';
+  document.getElementById('dipBtn').classList.toggle('hidden', done < 28);
+  const xg = document.getElementById('xgrid'); xg.innerHTML = '';
+  L.forEach((l,i)=>{ if(!l.x) return; const st = letterStars(i), d = letterDone(i);
+    const b = document.createElement('button'); b.className = 'xtile'+(d?' done':'');
+    b.innerHTML = `<span class="ar">${l.ch}</span><span class="xt"><b>${l.n}</b><small>${l.g}</small></span><span class="st">${st>0?'★'.repeat(Math.round(st))+'☆'.repeat(3-Math.round(st)):''}</span>`;
+    b.onclick = ()=>{ location.hash = '#l'+(i+1); }; xg.appendChild(b); });
+}
+
+
+/* ---------- PDF по слову-ключу ---------- */
+const keyNorm = w => (w||'').trim().toLowerCase().replace(/ё/g,'е');
+async function openPdf(word){
+  const r = await fetch('propisi.bin'); if(!r.ok) throw new Error('net');
+  const buf = new Uint8Array(await r.arrayBuffer());
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(keyNorm(word)), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt: buf.slice(0,16), iterations:150000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const pdf = await crypto.subtle.decrypt({name:'AES-GCM', iv: buf.slice(16,28)}, key, buf.slice(28));   // неверное слово → ошибка
+  const url = URL.createObjectURL(new Blob([pdf], {type:'application/pdf'}));
+  const a = document.createElement('a'); a.href = url; a.download = 'Pishu_po-arabski_propisi.pdf'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 60000);
+}
+(function(){
+  const M = document.getElementById('keyM'), I = document.getElementById('keyIn'), E = document.getElementById('keyErr'), G = document.getElementById('keyGo');
+  let saved = ''; try{ saved = localStorage.getItem('aktubu-key')||''; }catch(e){}
+  const run = async w=>{ G.disabled = true; G.textContent = 'Открываю…'; E.textContent = '';
+    try{ await openPdf(w); try{ localStorage.setItem('aktubu-key', w); }catch(e){} saved = w; M.classList.add('hidden'); SND.good(); }
+    catch(e){ if(e && e.message==='net') E.textContent = 'Не удалось загрузить файл. Проверьте интернет.'; else { E.textContent = 'Слово не подходит. Проверьте, нет ли опечатки.'; try{ localStorage.removeItem('aktubu-key'); }catch(_){} saved = ''; M.classList.remove('hidden'); } }
+    G.disabled = false; G.textContent = 'Открыть PDF'; };
+  document.getElementById('pdfBtn').onclick = e=>{ e.preventDefault(); if(saved){ toast('Открываю PDF…'); run(saved); } else { M.classList.remove('hidden'); E.textContent = ''; setTimeout(()=>I.focus(), 50); } };
+  G.onclick = ()=>{ if(!I.value.trim()){ E.textContent = 'Введите слово-ключ'; return; } run(I.value); };
+  I.addEventListener('keydown', e=>{ if(e.key==='Enter') G.click(); });
+  document.getElementById('keyNo').onclick = ()=>M.classList.add('hidden');
+})();
+
+/* ---------- диплом ---------- */
+function drawDiploma(name){
+  const c = document.getElementById('dipC'), x = c.getContext('2d'), W = 1080, H = 1350, GO = '#B8954F', GR = '#1F4B3A';
+  x.fillStyle = '#F7F3EA'; x.fillRect(0,0,W,H);
+  const g = x.createRadialGradient(W/2,420,40,W/2,420,620); g.addColorStop(0,'#FFF3CF'); g.addColorStop(1,'rgba(255,243,207,0)'); x.fillStyle = g; x.fillRect(0,0,W,H);
+  const arch = (i)=>{ x.beginPath(); x.moveTo(90+i,H-90-i); x.lineTo(90+i,430); x.quadraticCurveTo(90+i,170+i,W/2,90+i); x.quadraticCurveTo(W-90-i,170+i,W-90-i,430); x.lineTo(W-90-i,H-90-i); x.closePath(); };
+  x.strokeStyle = GO; x.lineWidth = 8; arch(0); x.stroke(); x.lineWidth = 2; arch(22); x.stroke();
+  const star = (cx,cy,r)=>{ x.save(); x.translate(cx,cy); x.strokeStyle = GO; x.lineWidth = 3; for(const a of [0,Math.PI/4]){ x.save(); x.rotate(a); x.strokeRect(-r,-r,2*r,2*r); x.restore(); } x.restore(); };
+  x.textAlign = 'center';
+  x.fillStyle = GO; x.font = '700 64px Amiri'; x.fillText('أَكْتُبُ بِالْعَرَبِيَّةِ', W/2, 330);
+  x.fillStyle = GR; x.font = 'italic 600 92px Lora, Georgia, serif'; x.fillText('Диплом', W/2, 470);
+  x.strokeStyle = GO; x.lineWidth = 2; x.beginPath(); x.moveTo(330,530); x.lineTo(500,530); x.moveTo(580,530); x.lineTo(750,530); x.stroke(); star(W/2,530,14);
+  x.fillStyle = '#2E6B52'; x.font = '34px Lora, Georgia, serif'; x.fillText('Этот диплом получает', W/2, 630);
+  let fs = 84; x.font = `600 ${fs}px Lora, Georgia, serif`; while(x.measureText(name).width > 760 && fs > 40){ fs -= 4; x.font = `600 ${fs}px Lora, Georgia, serif`; }
+  x.fillStyle = GR; x.fillText(name, W/2, 740);
+  x.fillStyle = '#2E6B52'; x.font = '34px Lora, Georgia, serif';
+  ['за пройденный путь', 'по 28 буквам арабского алфавита', 'в тренажёре «Пишу по-арабски»'].forEach((t,i)=>x.fillText(t, W/2, 830 + i*52));
+  x.fillStyle = GO; x.font = '58px Amiri'; x.fillText('رَبِّ زِدْنِي عِلْمًا', W/2, 1035);
+  x.fillStyle = '#2E6B52'; x.font = 'italic 28px Lora, Georgia, serif'; x.fillText('«Господи, прибавь мне знания» (20:114)', W/2, 1120);
+  const d = new Date(); x.font = '26px Lora, Georgia, serif'; x.fillStyle = GO;
+  x.fillText(d.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'}), W/2, 1190);
+  return c.toDataURL('image/png');
+}
+(function(){
+  const M = document.getElementById('dipM'), N = document.getElementById('dipName'), C = document.getElementById('dipC'), S2 = document.getElementById('dipSave');
+  document.getElementById('dipBtn').onclick = ()=>{ M.classList.remove('hidden'); try{ N.value = localStorage.getItem('aktubu-name')||''; }catch(e){} };
+  document.getElementById('dipGo').onclick = async ()=>{ const n = N.value.trim(); if(!n){ N.focus(); return; }
+    try{ localStorage.setItem('aktubu-name', n); }catch(e){}
+    await Promise.all([document.fonts.load('700 64px Amiri'), document.fonts.load('600 84px Lora'), document.fonts.load('italic 600 92px Lora')]).catch(()=>{});
+    S2.href = drawDiploma(n); C.style.display = 'block'; S2.classList.remove('hidden'); SND.done(); };
+  document.getElementById('dipNo').onclick = ()=>M.classList.add('hidden');
+})();
+
+/* ---------- звуки (Web Audio, без файлов) ---------- */
+let AC = null, MUTE = false, scr = null;
+try{ MUTE = localStorage.getItem('aktubu-mute')==='1'; }catch(e){}
+function ac(){ if(MUTE) return null; try{ if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); }catch(e){ return null; } return AC; }
+function tone(f, t0, dur, vol, type){ const a = ac(); if(!a) return; const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + t0;
+  o.type = type||'sine'; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t+.015); g.gain.exponentialRampToValueAtTime(.0001, t+dur);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t+dur+.05); }
+const SND = {
+  tap(){ tone(880,0,.08,.05,'triangle'); },
+  good(){ [523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,i*.09,.5,.09)); },
+  ok(){ [523.25,659.25,783.99].forEach((f,i)=>tone(f,i*.1,.4,.08)); },
+  soft(){ tone(392,0,.25,.07); tone(349.23,.14,.35,.06); },
+  show(){ const a = ac(); if(!a) return; const o = a.createOscillator(), g = a.createGain(), t = a.currentTime;
+    o.type='sine'; o.frequency.setValueAtTime(300,t); o.frequency.exponentialRampToValueAtTime(900,t+.5); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.05,t+.08); g.gain.exponentialRampToValueAtTime(.0001,t+.6);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t+.65); },
+  erase(){ const a = ac(); if(!a) return; const n = a.createBufferSource(), b = a.createBuffer(1, a.sampleRate*.25, a.sampleRate), d = b.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*(1-i/d.length); n.buffer = b; const f = a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1800; const g = a.createGain(); g.gain.value=.12;
+    n.connect(f).connect(g).connect(a.destination); n.start(); },
+  next(){ tone(659.25,0,.18,.07); tone(987.77,.1,.3,.07); },
+  done(){ [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>tone(f,i*.11,.7,.08)); }
+};
+// тихий «шорох пера», пока палец ведёт линию
+function scratchStart(){ const a = ac(); if(!a) return; try{
+  const b = a.createBuffer(1, a.sampleRate, a.sampleRate), d = b.getChannelData(0); for(let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
+  const n = a.createBufferSource(); n.buffer = b; n.loop = true; const f = a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2600; f.Q.value=.8;
+  const g = a.createGain(); g.gain.value = 0; n.connect(f).connect(g).connect(a.destination); n.start(); scr = {n,g}; }catch(e){} }
+function scratchSpeed(v){ if(scr && AC) scr.g.gain.setTargetAtTime(Math.min(.035, v*.004), AC.currentTime, .03); }
+function scratchStop(){ if(scr){ try{ scr.g.gain.setTargetAtTime(0, AC.currentTime, .03); const n = scr.n; setTimeout(()=>{ try{ n.stop(); }catch(e){} }, 150); }catch(e){} scr = null; } }
+/* ---------- холст ---------- */
+const pad = document.getElementById('pad'), bg = document.getElementById('bg'), ink = document.getElementById('ink');
+const bx = bg.getContext('2d'), ix = ink.getContext('2d');
+let DPR = 1, CW = 0, CH = 0, strokes = [], cur = null, LI = 0, EJ = 0, model = null, anim = 0;
+const FREE = document.getElementById('free');
+try{ FREE.checked = localStorage.getItem('aktubu-free')==='1'; }catch(e){}
+
+function fit(){
+  const r = pad.getBoundingClientRect(); DPR = Math.min(window.devicePixelRatio||1, 2.5);
+  CW = r.width; CH = r.height;
+  for(const c of [bg,ink]){ c.width = Math.round(CW*DPR); c.height = Math.round(CH*DPR); c.getContext('2d').setTransform(DPR,0,0,DPR,0,0); }
+}
+// размещение образца: подбираем кегль, чтобы текст занимал ~70% ширины и не выходил по высоте
+function layout(text){
+  const m = document.createElement('canvas').getContext('2d');
+  let fs = CH*0.62; m.font = `${fs}px Amiri`;
+  let mt = m.measureText(text);
+  let w = mt.actualBoundingBoxLeft + mt.actualBoundingBoxRight, h = mt.actualBoundingBoxAscent + mt.actualBoundingBoxDescent;
+  const k = Math.min(CW*(text.length>12?0.9:0.78)/w, CH*0.70/h, 1.6); fs *= k; m.font = `${fs}px Amiri`; mt = m.measureText(text);
+  w = mt.actualBoundingBoxLeft + mt.actualBoundingBoxRight; h = mt.actualBoundingBoxAscent + mt.actualBoundingBoxDescent;
+  const x = CW/2 - w/2 + mt.actualBoundingBoxLeft;   // точка привязки для textAlign:left
+  const y = CH/2 - h/2 + mt.actualBoundingBoxAscent - CH*0.02;
+  return {text, fs, x, y, base: y, w, h, top: y - mt.actualBoundingBoxAscent, bot: y + mt.actualBoundingBoxDescent};
+}
+function guides(c){
+  c.save(); c.strokeStyle = '#E7DCC3'; c.lineWidth = 1;
+  c.setLineDash([]); c.beginPath(); c.moveTo(14, model.base); c.lineTo(CW-14, model.base); c.stroke();
+  c.setLineDash([4,6]); c.beginPath(); const mid = model.base - model.fs*0.28; c.moveTo(14, mid); c.lineTo(CW-14, mid); c.stroke();
+  c.restore();
+}
+function drawModel(alpha, clipX){
+  bx.clearRect(0,0,CW,CH); guides(bx);
+  if(alpha<=0) return;
+  bx.save();
+  if(!model.img){ // образец рисуем один раз непрозрачным, потом накладываем с прозрачностью — без тёмных пятен на стыках
+    const o = document.createElement('canvas'); o.width = bg.width; o.height = bg.height; const ox = o.getContext('2d');
+    ox.setTransform(DPR,0,0,DPR,0,0); ox.font = `${model.fs}px Amiri`; ox.textAlign = 'left'; ox.textBaseline = 'alphabetic';
+    ox.fillStyle = '#B8954F'; ox.fillText(model.text, model.x, model.y); model.img = o; }
+  bx.globalAlpha = alpha; bx.setTransform(1,0,0,1,0,0);
+  if(clipX!==undefined){ bx.beginPath(); bx.rect(clipX*DPR,0,(CW-clipX)*DPR,CH*DPR); bx.clip(); }
+  bx.drawImage(model.img, 0, 0);
+  bx.restore();
+}
+function redrawInk(){
+  ix.clearRect(0,0,CW,CH);
+  ix.lineCap = 'round'; ix.lineJoin = 'round'; ix.strokeStyle = '#1F4B3A';
+  for(const s of strokes.concat(cur?[cur]:[])){
+    ix.lineWidth = s.w; ix.beginPath();
+    if(s.p.length===1){ ix.arc(s.p[0][0], s.p[0][1], s.w/2, 0, 7); ix.fillStyle='#1F4B3A'; ix.fill(); continue; }
+    ix.moveTo(s.p[0][0], s.p[0][1]);
+    for(let k=1;k<s.p.length-1;k++){ const a=s.p[k], b=s.p[k+1]; ix.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2); }
+    const z = s.p[s.p.length-1]; ix.lineTo(z[0], z[1]); ix.stroke();
+  }
+}
+function penW(){ return Math.max(5, model.fs*0.075); }
+function pt(e){ const r = ink.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+ink.addEventListener('pointerdown', e=>{ e.preventDefault(); hideRes(); cancelAnim(); ink.setPointerCapture(e.pointerId); cur = {w: penW(), p:[pt(e)]}; redrawInk(); scratchStart(); });
+ink.addEventListener('pointermove', e=>{ if(!cur) return; const p = pt(e), q = cur.p[cur.p.length-1]; const dd = Math.hypot(p[0]-q[0],p[1]-q[1]); if(dd>1.2){ cur.p.push(p); redrawInk(); scratchSpeed(dd); } });
+const up = ()=>{ scratchStop(); if(cur){ strokes.push(cur); cur = null; redrawInk(); } };
+ink.addEventListener('pointerup', up); ink.addEventListener('pointercancel', up);
+
+/* ---------- проверка ---------- */
+function mask(drawFn){
+  const W = 160, H = Math.round(160*CH/CW), c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d'); x.scale(W/CW, H/CH); drawFn(x);
+  const d = x.getImageData(0,0,W,H).data, a = new Uint8Array(W*H);
+  for(let i=0;i<W*H;i++) a[i] = d[i*4+3] > 60 ? 1 : 0;
+  return a;
+}
+function inkPaths(x, extra){
+  x.lineCap='round'; x.lineJoin='round'; x.strokeStyle='#000'; x.fillStyle='#000';
+  for(const s of strokes){ x.lineWidth = s.w + extra; x.beginPath(); x.moveTo(s.p[0][0], s.p[0][1]); for(const p of s.p) x.lineTo(p[0],p[1]); if(s.p.length===1) x.lineTo(s.p[0][0]+.1, s.p[0][1]); x.stroke(); }
+}
+function modelPaths(x, extra){
+  x.font = `${model.fs}px Amiri`; x.textAlign='left'; x.textBaseline='alphabetic'; x.fillStyle='#000'; x.fillText(model.text, model.x, model.y);
+  if(extra){ x.lineWidth = extra; x.lineJoin='round'; x.strokeStyle='#000'; x.strokeText(model.text, model.x, model.y); }
+}
+function score(){
+  const tol = Math.max(6, model.fs*0.04);
+  const M = mask(x=>modelPaths(x,0)), Md = mask(x=>modelPaths(x,tol*2));
+  const I = mask(x=>inkPaths(x,0)), Id = mask(x=>inkPaths(x,tol*2));
+  let m=0, mc=0, i=0, ic=0;
+  for(let k=0;k<M.length;k++){ if(M[k]){ m++; if(Id[k]) mc++; } if(I[k]){ i++; if(Md[k]) ic++; } }
+  if(i < 8) return null;
+  const cover = mc/m, prec = ic/i;
+  return {cover, prec, s: Math.min(cover, prec*1.05)};
+}
+const MSG = {3:['Машаллах! Очень ровно','Прекрасно, баракаЛлаху фик!','Красиво легло — машаллах!'],2:['Хорошо! Ещё раз — и будет отлично','Неплохо! Следите за образцом','Почти! Попробуйте чуть аккуратнее'],1:['Начало есть — попробуйте ещё раз','Ведите медленнее, по самой линии'],0:['Обведите всю букву по образцу','Линия ушла от образца — попробуем снова']};
+function check(){
+  const r = score();
+  if(!r){ toast('Сначала напишите букву пальцем'); return; }
+  let st = r.s>=.85?3 : r.s>=.68?2 : r.s>=.5?1 : 0;
+  let hint = '';
+  if(st>0 && st<3 && r.cover < r.prec - .12) hint = ' · не всё обведено';
+  else if(st>0 && st<3 && r.prec < r.cover - .12) hint = ' · линия выходит за образец';
+  const arr = MSG[st];
+  document.getElementById('stars').textContent = '★'.repeat(st)+'☆'.repeat(3-st);
+  document.getElementById('msg').textContent = arr[Math.floor(Math.random()*arr.length)] + hint;
+  document.getElementById('res').classList.remove('hidden');
+  if(FREE.checked) drawModel(.35);    // без образца — после проверки показываем, как надо
+  S[LI] = S[LI]||{}; if(st > (S[LI][EJ]||0)){ S[LI][EJ] = st; save(); }
+  try{ navigator.vibrate && navigator.vibrate(st>=2?[20,40,20]:30); }catch(e){}
+  (st===3?SND.good:st===2?SND.ok:SND.soft)();
+  drawSteps();
+  if(st>=2){ document.getElementById('next').classList.remove('hidden'); document.getElementById('check').classList.add('hidden'); }
+}
+function hideRes(){ document.getElementById('res').classList.add('hidden'); }
+
+/* ---------- «показать» — проявление справа налево ---------- */
+function cancelAnim(){ if(anim){ cancelAnimationFrame(anim); anim = 0; drawModel(FREE.checked?0:.28); } }
+function show(){
+  cancelAnim(); hideRes();
+  const L0 = model.x + 0, R0 = model.x + model.w, t0 = performance.now(), dur = 1400 + model.w*3;
+  const step = t=>{ const k = Math.min(1,(t-t0)/dur); drawModel(.75, R0 - (R0-L0+20)*k);
+    if(k<1) anim = requestAnimationFrame(step); else { anim = 0; setTimeout(()=>{ if(!anim) drawModel(FREE.checked?0:.28); }, 900); } };
+  anim = requestAnimationFrame(step);
+}
+
+/* ---------- экран буквы ---------- */
+function drawSteps(){
+  const ex = exercises(L[LI]), el = document.getElementById('steps'); el.innerHTML = '';
+  ex.forEach((e,j)=>{
+    const b = document.createElement('button'); b.className = (j===EJ?'on ':'') + (best(LI,j)>=2?'ok':'');
+    b.innerHTML = `<span class="ar">${e.label}</span>`; b.title = e.name;
+    b.onclick = ()=>{ EJ = j; setEx(); }; el.appendChild(b);
+  });
+}
+function setEx(){
+  const l = L[LI], e = exercises(l)[EJ];
+  strokes = []; cur = null; hideRes(); cancelAnim();
+  document.getElementById('next').classList.add('hidden'); document.getElementById('check').classList.remove('hidden');
+  document.getElementById('task').innerHTML = e.kind==='f' ? `Буква <b>${l.n}</b> — ${e.name}` : e.kind==='x' ? `<b>${e.name}</b>` : `Слово: <b>${e.name}</b>`;
+  fit(); model = layout(e.t); drawModel(FREE.checked?0:.28); redrawInk(); drawSteps();
+}
+function openLetter(i){
+  LI = i; EJ = 0; const l = L[i];
+  document.getElementById('home').classList.add('hidden'); document.getElementById('letter').classList.remove('hidden');
+  document.getElementById('lname').textContent = l.x ? l.n : `${i+1}. ${l.n}`;
+  document.getElementById('lsnd').textContent = l.g;
+  document.getElementById('lbig').textContent = l.ch;
+  if(l.x){ document.getElementById('info').innerHTML = `<h3>${l.n}</h3><p>${l.how}</p>`; window.scrollTo(0,0); document.fonts.load('80px Amiri').then(setEx, setEx); return; }
+  const fs = forms(l);
+  document.getElementById('info').innerHTML =
+    `<h3>Как писать</h3><p>${l.how}</p><p><b>Размер:</b> ${l.size}</p><p><b>Звук:</b> ${l.snd}</p>
+     ${l.conn?'':'<p><b>Внимание:</b> с буквой слева эта буква не соединяется — следующая буква пишется отдельно.</p>'}
+     <p><b>Частая ошибка:</b> ${l.err}</p>
+     <div class="forms">${fs.map(([t,n])=>`<div><span class="ar">${t}</span><small>${n}</small></div>`).join('')}</div>`;
+  window.scrollTo(0,0);
+  document.fonts.load('80px Amiri').then(setEx, setEx);
+}
+document.getElementById('back').onclick = ()=>{ location.hash = ''; };
+document.getElementById('undo').onclick = ()=>{ SND.tap(); strokes.pop(); hideRes(); redrawInk(); };
+document.getElementById('clear').onclick = ()=>{ SND.erase(); strokes = []; hideRes(); redrawInk(); document.getElementById('next').classList.add('hidden'); document.getElementById('check').classList.remove('hidden'); if(FREE.checked) drawModel(0); };
+document.getElementById('show').onclick = ()=>{ SND.show(); show(); };
+document.getElementById('check').onclick = check;
+document.getElementById('next').onclick = ()=>{
+  const n = exercises(L[LI]).length;
+  if(EJ < n-1){ SND.next(); EJ++; setEx(); }
+  else if(L[LI].x){ SND.done(); toast(`«${L[LI].n}» — машаллах!`); location.hash = LI < L.length-1 ? '#l'+(LI+2) : ''; }
+  else if(LI < 27){ SND.done(); toast(`Буква ${L[LI].n} пройдена — машаллах!`); location.hash = '#l'+(LI+2); }
+  else { SND.done(); toast('Все 28 букв пройдены — машаллах!'); location.hash = ''; }
+};
+const SB = document.getElementById('sndb'); const sbSet = ()=>{ SB.textContent = MUTE ? '🔇' : '🔊'; }; sbSet();
+SB.onclick = ()=>{ MUTE = !MUTE; try{ localStorage.setItem('aktubu-mute', MUTE?'1':'0'); }catch(e){} sbSet(); if(!MUTE) SND.tap(); };
+FREE.onchange = ()=>{ try{ localStorage.setItem('aktubu-free', FREE.checked?'1':'0'); }catch(e){} hideRes(); drawModel(FREE.checked?0:.28); };
+let rt; window.addEventListener('resize', ()=>{ clearTimeout(rt); rt = setTimeout(()=>{ if(!document.getElementById('letter').classList.contains('hidden')){ const old = strokes; setEx(); } }, 200); });
+
+function toast(t){ const el = document.getElementById('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('on'), 2200); }
+function route(){
+  const m = /^#l(\d+)$/.exec(location.hash);
+  if(m && +m[1]>=1 && +m[1]<=L.length) openLetter(+m[1]-1);
+  else { document.getElementById('letter').classList.add('hidden'); document.getElementById('home').classList.remove('hidden'); drawHome(); }
+}
+window.addEventListener('hashchange', route);
+route();
+// обновления: проверяем новую версию при каждом открытии и возвращении в приложение,
+// а когда она пришла — тихо перезагружаем страницу (прогресс хранится отдельно и не теряется)
+if('serviceWorker' in navigator){
+  let reloaded = false, hadCtrl = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if(hadCtrl && !reloaded){ reloaded = true; location.reload(); } hadCtrl = true; });
+  navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).then(reg=>{
+    const chk = ()=>{ try{ reg.update(); }catch(e){} };
+    document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') chk(); });
+    setInterval(chk, 5*60*1000);
+  }).catch(()=>{});
+}
+</script>
+</body>
+</html>
