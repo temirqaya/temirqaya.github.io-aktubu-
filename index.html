@@ -108,9 +108,9 @@ p,li,.intro,.foot,small{text-wrap:pretty}
     <div class="sub">Тренажёр письма · почерк насх</div>
     <p class="intro">Тренажёр к прописям «Пишу по-арабски». Здесь рука учится вести линию прямо на экране телефона: обводите образец пальцем, а тренажёр подскажет, насколько ровно получилось.</p>
   </div>
-  <a class="pdf" href="#" id="pdfBtn">
+  <a class="pdf" href="Pishu_po-arabski_propisi.pdf" target="_blank" rel="noopener">
     <span class="pi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></svg></span>
-    <span><b>Скачать прописи (PDF)</b><small>75 страниц для печати · откроется по слову-ключу из покупки</small></span></a>
+    <span><b>Скачать прописи (PDF)</b><small>75 страниц для печати · откроется сразу</small></span></a>
   <details class="help" open>
     <summary>Для чего тренажёр</summary>
     <p>Прописи на бумаге учат руку, а тренажёр помогает между занятиями: в дороге, в очереди, когда под рукой нет тетради. Он показывает форму каждой буквы, порядок движения и сразу проверяет, легла ли ваша линия по образцу.</p>
@@ -163,14 +163,6 @@ p,li,.intro,.foot,small{text-wrap:pretty}
   <button class="main" id="dipGo">Показать диплом</button>
   <a class="main gold hidden" id="dipSave" download="diplom-pishu-po-arabski.png" style="text-align:center;text-decoration:none">Сохранить картинку</a>
   <button class="mcancel" id="dipNo">Закрыть</button>
-</div></div>
-<div class="modal hidden" id="keyM"><div class="mbox">
-  <b>Прописи для печати</b>
-  <p>Введите слово-ключ, которое вы получили при покупке. Его нужно ввести только один раз — дальше PDF будет открываться сразу.</p>
-  <input id="keyIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="слово-ключ">
-  <div class="merr" id="keyErr"></div>
-  <button class="main" id="keyGo">Открыть PDF</button>
-  <button class="mcancel" id="keyNo">Отмена</button>
 </div></div>
 
 <script>
@@ -247,30 +239,7 @@ function drawHome(){
 }
 
 
-/* ---------- PDF по слову-ключу ---------- */
-const keyNorm = w => (w||'').trim().toLowerCase().replace(/ё/g,'е');
-async function openPdf(word){
-  const r = await fetch('propisi.bin'); if(!r.ok) throw new Error('net');
-  const buf = new Uint8Array(await r.arrayBuffer());
-  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(keyNorm(word)), 'PBKDF2', false, ['deriveKey']);
-  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt: buf.slice(0,16), iterations:150000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['decrypt']);
-  const pdf = await crypto.subtle.decrypt({name:'AES-GCM', iv: buf.slice(16,28)}, key, buf.slice(28));   // неверное слово → ошибка
-  const url = URL.createObjectURL(new Blob([pdf], {type:'application/pdf'}));
-  const a = document.createElement('a'); a.href = url; a.download = 'Pishu_po-arabski_propisi.pdf'; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 60000);
-}
-(function(){
-  const M = document.getElementById('keyM'), I = document.getElementById('keyIn'), E = document.getElementById('keyErr'), G = document.getElementById('keyGo');
-  let saved = ''; try{ saved = localStorage.getItem('aktubu-key')||''; }catch(e){}
-  const run = async w=>{ G.disabled = true; G.textContent = 'Открываю…'; E.textContent = '';
-    try{ await openPdf(w); try{ localStorage.setItem('aktubu-key', w); }catch(e){} saved = w; M.classList.add('hidden'); SND.good(); }
-    catch(e){ if(e && e.message==='net') E.textContent = 'Не удалось загрузить файл. Проверьте интернет.'; else { E.textContent = 'Слово не подходит. Проверьте, нет ли опечатки.'; try{ localStorage.removeItem('aktubu-key'); }catch(_){} saved = ''; M.classList.remove('hidden'); } }
-    G.disabled = false; G.textContent = 'Открыть PDF'; };
-  document.getElementById('pdfBtn').onclick = e=>{ e.preventDefault(); if(saved){ toast('Открываю PDF…'); run(saved); } else { M.classList.remove('hidden'); E.textContent = ''; setTimeout(()=>I.focus(), 50); } };
-  G.onclick = ()=>{ if(!I.value.trim()){ E.textContent = 'Введите слово-ключ'; return; } run(I.value); };
-  I.addEventListener('keydown', e=>{ if(e.key==='Enter') G.click(); });
-  document.getElementById('keyNo').onclick = ()=>M.classList.add('hidden');
-})();
+
 
 /* ---------- диплом ---------- */
 function drawDiploma(name){
